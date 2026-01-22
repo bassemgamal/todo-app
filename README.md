@@ -63,7 +63,7 @@ How to Run Locally
 
 Clone the repository:
 
-git clone https://github.com/basemgamal/todo-app.git
+git clone [https://github.com/basemgamal/todo-app.git](https://github.com/bassemgamal/todo-app.git)
 
 Open index.html in your browser.
 
