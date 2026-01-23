@@ -1,73 +1,98 @@
-let tasklist = document.getElementById("taskList");
-let taskInput = document.getElementById("taskInput");
-let addBtn = document.getElementById("addBtn");
-let allBtn = document.getElementById("allBtn");
-let completedBtn = document.getElementById("completedBtn");
-let activeBtn = document.getElementById("activeBtn");
+const taskInput = document.getElementById("taskInput");
+const addBtn = document.getElementById("addBtn");
+const taskList = document.getElementById("taskList");
 
-let tasks = JSON.parse(localStorage.getItem("tasks"))||[{text:"wash my teeth",isCompleted:false}];
+const allBtn = document.getElementById("allBtn");
+const activeBtn = document.getElementById("activeBtn");
+const completedBtn = document.getElementById("completedBtn");
+
+let tasks = [];
 let filter = "all";
 
-allBtn.addEventListener("click",()=>{
-filter = "all";
-  RerenderList();
-});
-completedBtn.addEventListener("click",()=>{
-filter = "completed";
-  RerenderList();
-});
-activeBtn.addEventListener("click",()=>{
-filter = "active";
-  RerenderList();
+// 🔹 جلب المهام من API
+async function fetchTasks() {
+  try {
+    const res = await fetch("http://localhost:3000/api/todos");
+    console.log(res);
+    tasks = await res.json();
+    console.log(tasks);
+    renderTasks();
+  } catch (err) {
+    console.error("Error fetching tasks:", err);
+  }
+}
+
+// استدعاء عند تحميل الصفحة
+fetchTasks();
+
+// إضافة مهمة جديدة عبر API
+addBtn.addEventListener("click", async () => {
+  const text = taskInput.value;
+  if (!text) return;
+
+  try {
+    const res = await fetch("http://localhost:3000/api/todos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text })
+    });
+
+    const newTask = await res.json();
+    tasks.push(newTask);
+    taskInput.value = "";
+    renderTasks();
+  } catch (err) {
+    console.error("Error adding task:", err);
+  }
 });
 
-addBtn.addEventListener("click",()=>{
-  let taskText = taskInput.value;
-  if(taskText == ""){
-    alert("Write a task first.");
-    return;
-  };
-  tasks.push({text: taskText, isCompleted:false});
-  taskInput.value = "";
-  saveTasks();
-  RerenderList();
-});
-function RerenderList(){
-  tasklist.innerHTML = "";
-  let filtered_tasks = tasks;
-  if(filter === "active"){
-   filtered_tasks = tasks.filter(t => !t.isCompleted); 
-  };
-  if(filter === "completed"){
-   filtered_tasks = tasks.filter(t => t.isCompleted); 
-  };
-  for(let i = 0; i < filtered_tasks.length; i++){
-    let li = document.createElement("li");
-    let p = document.createElement("p");
-    p.innerText = filtered_tasks[i].text;
-    if(filtered_tasks[i].isCompleted){
-      li.setAttribute("class", "completed");
-    };
-    p.addEventListener("click",()=>{
-      filtered_tasks[i].isCompleted = !filtered_tasks[i].isCompleted;
-      saveTasks();
-      RerenderList();
-    });
-    let removeBtn = document.createElement("button");
-    removeBtn.textContent = "Delete";
-    removeBtn.setAttribute("class", "deleteBtn");
-    removeBtn.addEventListener("click",(e)=>{
-      e.stopPropagation();
-      tasks.splice(i, 1);
-      saveTasks();
-      RerenderList();
-    });
+// الفلترة
+allBtn.onclick = () => { filter = "all"; renderTasks(); };
+activeBtn.onclick = () => { filter = "active"; renderTasks(); };
+completedBtn.onclick = () => { filter = "completed"; renderTasks(); };
+
+// عرض المهام
+function renderTasks() {
+  taskList.innerHTML = "";
+
+  let filteredTasks = tasks;
+  if (filter === "active") filteredTasks = tasks.filter(t => !t.completed);
+  if (filter === "completed") filteredTasks = tasks.filter(t => t.completed);
+
+  filteredTasks.forEach(task => {
+    const li = document.createElement("li");
+    const p = document.createElement("p");
+    p.innerText = task.text;
     li.appendChild(p);
-    li.appendChild(removeBtn);
-    tasklist.appendChild(li);
-  };
-};
+    if (task.completed) li.classList.add("completed");
 
-function saveTasks(){
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-};
+    // ✅ تعليم كمكتمل
+    li.onclick = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/api/todos/${task._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: task.text, completed: !task.completed })
+        });
+        const updatedTask = await res.json();
+        tasks = tasks.map(t => t._id === updatedTask._id ? updatedTask : t);
+        renderTasks();
+      } catch (err) { console.error(err); }
+    };
+
+    // ❌ حذف
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerText = "❌";
+    deleteBtn.onclick = async (e) => {
+      e.stopPropagation();
+      try {
+        await fetch(`http://localhost:3000/api/todos/${task._id}`, { method: "DELETE" });
+        tasks = tasks.filter(t => t._id !== task._id);
+        renderTasks();
+      } catch (err) { console.error(err); }
+    };
+
+    li.appendChild(deleteBtn);
+    taskList.appendChild(li);
+  });
+}
