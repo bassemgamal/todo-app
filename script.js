@@ -6,6 +6,28 @@ const allBtn = document.getElementById("allBtn");
 const activeBtn = document.getElementById("activeBtn");
 const completedBtn = document.getElementById("completedBtn");
 
+
+// تبديل الوضع الليلي
+const themeToggle = document.getElementById("themeToggle");
+
+if(localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark");
+  themeToggle.textContent = "☀️ Light";
+}
+
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+
+  if (document.body.classList.contains("dark")) {
+    localStorage.setItem("theme", "dark");
+    themeToggle.textContent = "☀️ Light";
+  } else {
+    localStorage.setItem("theme", "light");
+    themeToggle.textContent = "🌙 Dark";
+  }
+});
+
 let tasks = [];
 let filter = "all";
 
@@ -13,9 +35,7 @@ let filter = "all";
 async function fetchTasks() {
   try {
     const res = await fetch("http://localhost:3000/api/todos");
-    console.log(res);
     tasks = await res.json();
-    console.log(tasks);
     renderTasks();
   } catch (err) {
     console.error("Error fetching tasks:", err);
@@ -85,10 +105,16 @@ function renderTasks() {
     deleteBtn.innerText = "❌";
     deleteBtn.onclick = async (e) => {
       e.stopPropagation();
+      li.style.animation = "fadeOut 0.3s ease";
       try {
-        await fetch(`http://localhost:3000/api/todos/${task._id}`, { method: "DELETE" });
-        tasks = tasks.filter(t => t._id !== task._id);
-        renderTasks();
+        setTimeout(async () => {
+    await fetch(`http://localhost:3000/api/todos/${task._id}`, {
+      method: "DELETE"
+    });
+
+    tasks = tasks.filter(t => t._id !== task._id);
+    renderTasks();
+  }, 300);
       } catch (err) { console.error(err); }
     };
 
