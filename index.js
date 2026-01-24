@@ -24,6 +24,11 @@ const Todo = mongoose.model("Todo", todoSchema);
 
 // Routes
 
+app.get("/", (req, res) => {
+  res.send("API is running 🚀");
+});
+
+
 // GET جميع المهام
 app.get("/api/todos", async (req, res) => {
   const todos = await Todo.find();
