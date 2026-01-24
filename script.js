@@ -34,7 +34,7 @@ let filter = "all";
 // 🔹 جلب المهام من API
 async function fetchTasks() {
   try {
-    const res = await fetch("http://localhost:3000/api/todos");
+    const res = await fetch("https://todo-app-production-6cf0.up.railway.app/api/todos");
     tasks = await res.json();
     renderTasks();
   } catch (err) {
@@ -51,7 +51,7 @@ addBtn.addEventListener("click", async () => {
   if (!text) return;
 
   try {
-    const res = await fetch("http://localhost:3000/api/todos", {
+    const res = await fetch("https://todo-app-production-6cf0.up.railway.app/api/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text })
@@ -89,7 +89,7 @@ function renderTasks() {
     // ✅ تعليم كمكتمل
     li.onclick = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/todos/${task._id}`, {
+        const res = await fetch(`https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text: task.text, completed: !task.completed })
@@ -108,7 +108,7 @@ function renderTasks() {
       li.style.animation = "fadeOut 0.3s ease";
       try {
         setTimeout(async () => {
-    await fetch(`http://localhost:3000/api/todos/${task._id}`, {
+    await fetch(`https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`, {
       method: "DELETE"
     });
 
