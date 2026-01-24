@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // 🟢 ربط MongoDB
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI||"mongodb+srv://bassem:4123@bassemgamal.b8rap.mongodb.net/")
 .then(() => console.log("MongoDB Connected"))
 .catch(err => console.log(err));
 
