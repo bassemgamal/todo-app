@@ -24,7 +24,8 @@ mongoose.connect(process.env.MONGO_URI||"mongodb+srv://bassem:4123@bassemgamal.b
 // 🧩 إنشاء Schema و Model
 const todoSchema = new mongoose.Schema({
   text: String,
-  completed: Boolean
+  completed: Boolean,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
 });
 
 const Todo = mongoose.model("Todo", todoSchema);
@@ -43,7 +44,7 @@ app.get("/api/todos",auth, async (req, res) => {
 });
 
 // POST إضافة مهمة جديدة
-app.post("/api/todos", async (req, res) => {
+app.post("/api/todos", auth, async (req, res) => {
   const {text} = req.body;
   if (!text || text.trim() === ""){
     return res.status(400).json({
@@ -51,7 +52,7 @@ app.post("/api/todos", async (req, res) => {
     });
   };
   try{
-    const newTodo = new Todo({ text: text.trim(), completed: false });
+    const newTodo = new Todo({ text: text.trim(), completed: false, user });
   await newTodo.save();
   res.status(201).json(newTodo);
   }catch(err){

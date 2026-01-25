@@ -2,7 +2,7 @@ const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
 
-let token = localStorage.getItem("token");
+token = localStorage.getItem("token");
 
 const allBtn = document.getElementById("allBtn");
 const activeBtn = document.getElementById("activeBtn");
@@ -199,7 +199,7 @@ async function checkAuth() {
     return (window.location.href = "auth.html");
   }
 
-  const res = await fetch("ttps://todo-app-production-6cf0.up.railway.app:8080/api/auth/me", {
+  const res = await fetch("https://todo-app-production-6cf0.up.railway.app/api/auth/me", {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
