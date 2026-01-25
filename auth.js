@@ -14,6 +14,9 @@ document.getElementById("showRegister").addEventListener("click", () => {
     registerForm.style.display = "block";
 });
 
+const regName = document.getElementById("regName");
+const regEmail = document.getElementById("regEmail");
+const regPassword = document.getElementById("regPassword");
 
 document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     e.preventDefault();
@@ -44,6 +47,9 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
         showMessage("Server error. ❌");
     };
 });
+
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
 
 document.getElementById("loginForm").addEventListener("submit", async (e)=>{
     e.preventDefault();
