@@ -69,11 +69,11 @@ addBtn.addEventListener("click", async () => {
     const res = await fetch(
       "https://todo-app-production-6cf0.up.railway.app/api/todos",
       {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify({ text }),
       },
     );
@@ -107,6 +107,8 @@ completedBtn.onclick = () => {
 
 // عرض المهام
 function renderTasks() {
+  console.log(localStorage.getItem("token"));
+
   taskList.innerHTML = "";
 
   let filteredTasks = tasks;
@@ -123,14 +125,15 @@ function renderTasks() {
     // ✅ تعليم كمكتمل
     li.onclick = async () => {
       try {
+        
         const res = await fetch(
           `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
           {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json"
+            },
             body: JSON.stringify({
               text: task.text,
               completed: !task.completed,
@@ -160,10 +163,11 @@ function renderTasks() {
           await fetch(
             `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
             {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
               method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+              },
             },
           );
 
@@ -201,7 +205,8 @@ async function checkAuth() {
 
   const res = await fetch("https://todo-app-production-6cf0.up.railway.app/api/auth/me", {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json"
     },
   });
 
