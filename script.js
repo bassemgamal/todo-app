@@ -37,16 +37,16 @@ async function fetchTasks() {
     const res = await fetch(
       "https://todo-app-production-6cf0.up.railway.app/api/todos",
       {
-        headers:{
-          Authorization: `Bearer ${token}`
-        }
-      }
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      },
     );
     tasks = await res.json();
-    if (!res.ok){
+    if (!res.ok) {
       showMessage(tasks.message || "Something went wrong.");
       return;
-    };
+    }
 
     renderTasks();
   } catch (err) {
@@ -69,8 +69,9 @@ addBtn.addEventListener("click", async () => {
     const res = await fetch(
       "https://todo-app-production-6cf0.up.railway.app/api/todos",
       {
-        headers:{
-          Authorization: `Bearer ${token}`},
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
@@ -78,10 +79,10 @@ addBtn.addEventListener("click", async () => {
     );
 
     const newTask = await res.json();
-    if (!res.ok){
+    if (!res.ok) {
       showMessage(newTask.message || "Something went wrong.");
       return;
-    };
+    }
     tasks.push(newTask);
     taskInput.value = "";
     renderTasks();
@@ -125,9 +126,9 @@ function renderTasks() {
         const res = await fetch(
           `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
           {
-        headers:{
-          Authorization: `Bearer ${token}`
-        },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -137,10 +138,10 @@ function renderTasks() {
           },
         );
         const updatedTask = await res.json();
-        if (!res.ok){
-      showMessage(updatedTask.message || "Something went wrong.");
-      return;
-    };
+        if (!res.ok) {
+          showMessage(updatedTask.message || "Something went wrong.");
+          return;
+        }
         tasks = tasks.map((t) => (t._id === updatedTask._id ? updatedTask : t));
         renderTasks();
       } catch (err) {
@@ -159,9 +160,9 @@ function renderTasks() {
           await fetch(
             `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
             {
-        headers:{
-          Authorization: `Bearer ${token}`
-        },
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
               method: "DELETE",
             },
           );
@@ -179,15 +180,36 @@ function renderTasks() {
   });
 }
 
-function showMessage(msg){
+function showMessage(msg) {
   const message = document.getElementById("message");
-message.textContent = msg;
-setTimeout(() => {
-  message.textContent = "";
-}, 3000);
-};
+  message.textContent = msg;
+  setTimeout(() => {
+    message.textContent = "";
+  }, 3000);
+}
 
-function logout(){
+function logout() {
   localStorage.removeItem("token");
   window.location.href = "auth.html";
-};
+}
+
+async function checkAuth() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return (window.location.href = "auth.html");
+  }
+
+  const res = await fetch("ttps://todo-app-production-6cf0.up.railway.app:8080/api/auth/me", {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (!res.ok) {
+    localStorage.removeItem("token");
+    window.location.href = "auth.html";
+  }
+}
+
+checkAuth();

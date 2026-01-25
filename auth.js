@@ -1,4 +1,4 @@
-const API = "http://localhost:8080/api/auth";
+const API = "https://todo-app-production-6cf0.up.railway.app:8080/api/auth";
 const message = document.getElementById("message");
 
 document.getElementById("registerForm").addEventListener("submit", async (e)=>{
@@ -44,7 +44,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e)=>{
     try{
         const res = await fetch(`${API}/login`, {
             method: "POST",
-            headers: {"Content-Type: application/json"},
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({email, password})
         });
 

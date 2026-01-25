@@ -102,4 +102,9 @@ app.delete("/api/todos/:id", async (req, res) => {
   };
 });
 
+app.get("/api/auth/me", auth, (req, res) => {
+  res.json({ok:true});
+});
+
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
