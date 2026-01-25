@@ -52,7 +52,7 @@ app.post("/api/todos", auth, async (req, res) => {
     });
   };
   try{
-    const newTodo = new Todo({ text: text.trim(), completed: false, user });
+    const newTodo = new Todo({ text: text.trim(), completed: false, user: req.user.id });
   await newTodo.save();
   res.status(201).json(newTodo);
   }catch(err){
@@ -100,8 +100,8 @@ app.delete("/api/todos/:id", async (req, res) => {
       return res.status(404).json({
         message: "Todo not found."
       });
-        res.json({ message: "Deleted" });
     };
+    res.json({ message: "Deleted" });
   }catch(err){
     res.status(500).json({
       message: "Server error."
