@@ -127,3 +127,8 @@ button:hover {
 button:active {
   transform: scale(0.95);
 }
+
+#message {
+  margin: 10px 0;
+  color: red;
+}

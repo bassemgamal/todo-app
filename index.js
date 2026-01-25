@@ -37,25 +37,68 @@ app.get("/api/todos", async (req, res) => {
 
 // POST إضافة مهمة جديدة
 app.post("/api/todos", async (req, res) => {
-  const newTodo = new Todo({ text: req.body.text, completed: false });
+  const {text} = req.body;
+  if (!text || text.trim() === ""){
+    return res.status(400).json({
+      message: "Task text is required."
+    });
+  };
+  try{
+    const newTodo = new Todo({ text: text.trim(), completed: false });
   await newTodo.save();
   res.status(201).json(newTodo);
+  }catch(err){
+    res.status(500).json({message: "Server error."});
+  };
+  
 });
 
 // PUT تعديل مهمة
 app.put("/api/todos/:id", async (req, res) => {
-  const updatedTodo = await Todo.findByIdAndUpdate(
+  const {text, completed} = req.body;
+if (!text || typeof completed !== "boolean"){
+  return res.status(400).json({
+    message: "Invalid data."
+  });
+};
+
+try{
+const updatedTodo = await Todo.findByIdAndUpdate(
     req.params.id,
-    { text: req.body.text, completed: req.body.completed },
+    { text: text.trim(), completed },
     { new: true }
   );
+
+  if(!updatedTodo){
+    return res.status(404).json({
+      message: "Todo not found."
+    });
+  };
   res.json(updatedTodo);
+}catch(err){
+  res.status(500).json({
+    message: "Server error."
+  });
+};
+
+  
 });
 
 // DELETE حذف مهمة
 app.delete("/api/todos/:id", async (req, res) => {
-  await Todo.findByIdAndDelete(req.params.id);
-  res.json({ message: "Deleted" });
+  try{
+    const deleted =   await Todo.findByIdAndDelete(req.params.id);
+    if (!deleted){
+      return res.status(404).json({
+        message: "Todo not found."
+      });
+        res.json({ message: "Deleted" });
+    };
+  }catch(err){
+    res.status(500).json({
+      message: "Server error."
+    });
+  };
 });
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

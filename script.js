@@ -6,15 +6,13 @@ const allBtn = document.getElementById("allBtn");
 const activeBtn = document.getElementById("activeBtn");
 const completedBtn = document.getElementById("completedBtn");
 
-
 // تبديل الوضع الليلي
 const themeToggle = document.getElementById("themeToggle");
 
-if(localStorage.getItem("theme") === "dark") {
+if (localStorage.getItem("theme") === "dark") {
   document.body.classList.add("dark");
   themeToggle.textContent = "☀️ Light";
 }
-
 
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
@@ -34,8 +32,15 @@ let filter = "all";
 // 🔹 جلب المهام من API
 async function fetchTasks() {
   try {
-    const res = await fetch("https://todo-app-production-6cf0.up.railway.app/api/todos");
+    const res = await fetch(
+      "https://todo-app-production-6cf0.up.railway.app/api/todos",
+    );
     tasks = await res.json();
+    if (!res.ok){
+      showMessage(tasks.message || "Something went wrong.");
+      return;
+    };
+
     renderTasks();
   } catch (err) {
     console.error("Error fetching tasks:", err);
@@ -47,17 +52,27 @@ fetchTasks();
 
 // إضافة مهمة جديدة عبر API
 addBtn.addEventListener("click", async () => {
-  const text = taskInput.value;
-  if (!text) return;
+  const text = taskInput.value.trim();
+  if (!text) {
+    showMessage("Task connot be empty. ❌");
+    return;
+  }
 
   try {
-    const res = await fetch("https://todo-app-production-6cf0.up.railway.app/api/todos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text })
-    });
+    const res = await fetch(
+      "https://todo-app-production-6cf0.up.railway.app/api/todos",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      },
+    );
 
     const newTask = await res.json();
+    if (!res.ok){
+      showMessage(newTask.message || "Something went wrong.");
+      return;
+    };
     tasks.push(newTask);
     taskInput.value = "";
     renderTasks();
@@ -67,19 +82,28 @@ addBtn.addEventListener("click", async () => {
 });
 
 // الفلترة
-allBtn.onclick = () => { filter = "all"; renderTasks(); };
-activeBtn.onclick = () => { filter = "active"; renderTasks(); };
-completedBtn.onclick = () => { filter = "completed"; renderTasks(); };
+allBtn.onclick = () => {
+  filter = "all";
+  renderTasks();
+};
+activeBtn.onclick = () => {
+  filter = "active";
+  renderTasks();
+};
+completedBtn.onclick = () => {
+  filter = "completed";
+  renderTasks();
+};
 
 // عرض المهام
 function renderTasks() {
   taskList.innerHTML = "";
 
   let filteredTasks = tasks;
-  if (filter === "active") filteredTasks = tasks.filter(t => !t.completed);
-  if (filter === "completed") filteredTasks = tasks.filter(t => t.completed);
+  if (filter === "active") filteredTasks = tasks.filter((t) => !t.completed);
+  if (filter === "completed") filteredTasks = tasks.filter((t) => t.completed);
 
-  filteredTasks.forEach(task => {
+  filteredTasks.forEach((task) => {
     const li = document.createElement("li");
     const p = document.createElement("p");
     p.innerText = task.text;
@@ -89,15 +113,27 @@ function renderTasks() {
     // ✅ تعليم كمكتمل
     li.onclick = async () => {
       try {
-        const res = await fetch(`https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: task.text, completed: !task.completed })
-        });
+        const res = await fetch(
+          `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              text: task.text,
+              completed: !task.completed,
+            }),
+          },
+        );
         const updatedTask = await res.json();
-        tasks = tasks.map(t => t._id === updatedTask._id ? updatedTask : t);
+        if (!res.ok){
+      showMessage(updatedTask.message || "Something went wrong.");
+      return;
+    };
+        tasks = tasks.map((t) => (t._id === updatedTask._id ? updatedTask : t));
         renderTasks();
-      } catch (err) { console.error(err); }
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     // ❌ حذف
@@ -108,17 +144,30 @@ function renderTasks() {
       li.style.animation = "fadeOut 0.3s ease";
       try {
         setTimeout(async () => {
-    await fetch(`https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`, {
-      method: "DELETE"
-    });
+          await fetch(
+            `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
+            {
+              method: "DELETE",
+            },
+          );
 
-    tasks = tasks.filter(t => t._id !== task._id);
-    renderTasks();
-  }, 300);
-      } catch (err) { console.error(err); }
+          tasks = tasks.filter((t) => t._id !== task._id);
+          renderTasks();
+        }, 300);
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     li.appendChild(deleteBtn);
     taskList.appendChild(li);
   });
 }
+
+function showMessage(){
+  const message = document.getElementById("message");
+message.textContent = msg;
+setTimeout(() => {
+  message.textContent = "";
+}, 3000);
+};
