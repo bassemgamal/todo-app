@@ -1,6 +1,20 @@
 const API = "https://todo-app-production-6cf0.up.railway.app/api/auth";
 const message = document.getElementById("message");
 
+const registerForm = document.getElementById("registerForm");
+const loginForm = document.getElementById("loginForm");
+
+document.getElementById("showLogin").addEventListener("click", () => {
+    registerForm.style.display = "none";
+    loginForm.style.display = "block";
+});
+
+document.getElementById("showRegister").addEventListener("click", () => {
+    loginForm.style.display = "none";
+    registerForm.style.display = "block";
+});
+
+
 document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     e.preventDefault();
 
