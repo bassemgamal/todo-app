@@ -2,7 +2,7 @@ const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
 
-const token = localStorage.getItem("token");
+let token = localStorage.getItem("token");
 
 const allBtn = document.getElementById("allBtn");
 const activeBtn = document.getElementById("activeBtn");
@@ -194,8 +194,7 @@ function logout() {
 }
 
 async function checkAuth() {
-  const token = localStorage.getItem("token");
-
+  token = localStorage.getItem("token");
   if (!token) {
     return (window.location.href = "auth.html");
   }
