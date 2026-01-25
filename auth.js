@@ -1,4 +1,4 @@
-const API = "https://todo-app-production-6cf0.up.railway.app:8080/api/auth";
+const API = "https://todo-app-production-6cf0.up.railway.app/api/auth";
 const message = document.getElementById("message");
 
 document.getElementById("registerForm").addEventListener("submit", async (e)=>{

@@ -2,13 +2,17 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const auth = require("./middleware/auth");
+const authRoutes = require("./routes/auth");
+
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/api/auth", authRoutes);
+
 
 // 🟢 ربط MongoDB
 mongoose.connect(process.env.MONGO_URI||"mongodb+srv://bassem:4123@bassemgamal.b8rap.mongodb.net/")
