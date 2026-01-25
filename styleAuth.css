@@ -1,0 +1,33 @@
+body{
+    font-family: Arial;
+    background: #111;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+form{
+    background: #1e1e1e;
+    padding: 20px;
+    width: 300px;
+    border-radius: 8px;
+}
+input, button{
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px;
+}
+button{
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+#message{
+    color: red;
+    margin-top: 10px;
+}
+#loginForm{
+    display: none;
+}

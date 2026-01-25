@@ -2,6 +2,8 @@ const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
 
+const token = localStorage.getItem("token");
+
 const allBtn = document.getElementById("allBtn");
 const activeBtn = document.getElementById("activeBtn");
 const completedBtn = document.getElementById("completedBtn");
@@ -34,6 +36,11 @@ async function fetchTasks() {
   try {
     const res = await fetch(
       "https://todo-app-production-6cf0.up.railway.app/api/todos",
+      {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      }
     );
     tasks = await res.json();
     if (!res.ok){
@@ -62,6 +69,8 @@ addBtn.addEventListener("click", async () => {
     const res = await fetch(
       "https://todo-app-production-6cf0.up.railway.app/api/todos",
       {
+        headers:{
+          Authorization: `Bearer ${token}`},
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
@@ -116,6 +125,9 @@ function renderTasks() {
         const res = await fetch(
           `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
           {
+        headers:{
+          Authorization: `Bearer ${token}`
+        },
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -147,6 +159,9 @@ function renderTasks() {
           await fetch(
             `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
             {
+        headers:{
+          Authorization: `Bearer ${token}`
+        },
               method: "DELETE",
             },
           );
@@ -170,4 +185,9 @@ message.textContent = msg;
 setTimeout(() => {
   message.textContent = "";
 }, 3000);
+};
+
+function logout(){
+  localStorage.removeItem("token");
+  window.location.href = "auth.html";
 };
