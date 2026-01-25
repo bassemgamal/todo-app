@@ -2,16 +2,19 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const auth = require("./middleware/auth");
-const authRoutes = require("./routes/auth");
+dotenv = require("dotenv");
 
 
 const app = express();
-const PORT = process.env.PORT || 8080;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
+
+const PORT = process.env.PORT || 8080;
 
 
 // 🟢 ربط MongoDB
