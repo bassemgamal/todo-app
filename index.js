@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const auth = require("./middleware/auth");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,8 +31,8 @@ app.get("/", (req, res) => {
 
 
 // GET جميع المهام
-app.get("/api/todos", async (req, res) => {
-  const todos = await Todo.find();
+app.get("/api/todos",auth, async (req, res) => {
+  const todos = await Todo.find({user: req.user.id});
   res.json(todos);
 });
 

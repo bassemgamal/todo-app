@@ -164,7 +164,7 @@ function renderTasks() {
   });
 }
 
-function showMessage(){
+function showMessage(msg){
   const message = document.getElementById("message");
 message.textContent = msg;
 setTimeout(() => {
