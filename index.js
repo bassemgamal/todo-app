@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const auth = require("./middleware/auth");
+const errorHandler = require("./middleware/errorHandler");
 require("dotenv").config();
 
 const app = express();
@@ -122,4 +123,4 @@ app.get("/api/auth/me", auth, (req, res) => {
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`),
 );
-app.use("./middleware/errorHandler");
+app.use(errorHandler);
