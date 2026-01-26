@@ -28,7 +28,7 @@ router.delete("/:id", auth, async (req, res) => {
 
     const deleted = await Todo.deleteOne({
       _id: todoId,
-      userId: userId,
+      user: userId,
     });
 
     if (deleted.deletedCount === 0) {
