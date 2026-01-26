@@ -24,10 +24,15 @@ router.post("/", auth, async (req, res) => {
 router.delete("/:id", auth, async (req, res) => {
   try {
     const todoId = req.params.id;
+    const userId = req.user.id;
 
     const deleted = await Todo.deleteOne({
       _id: todoId,
+      userId,
     });
+    console.log(_id);
+    console.log(userId);
+    console.log(deleted);
 
     if (deleted.deletedCount === 0) {
       return res.status(404).json({ message: "Todo not found or not allowed" });
