@@ -24,9 +24,6 @@ router.post("/", auth, async (req, res) => {
 router.delete("/:id", auth, async (req, res) => {
   try {
     // تأكد من تحويل الـ IDs
-    const todoId = mongoose.Types.ObjectId(req.params.id);
-    const userId = mongoose.Types.ObjectId(req.user.id);
-    console.log("🧨 DELETE ROUTE HIT");
     console.log("Todo ID:", req.params.id);
     console.log("User ID:", req.user);
 

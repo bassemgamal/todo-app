@@ -99,6 +99,9 @@ app.put("/api/todos/:id", async (req, res) => {
 // DELETE حذف مهمة
 app.delete("/api/todos/:id", async (req, res) => {
   try {
+    console.log("🧨 DELETE ROUTE HIT");
+    console.log("Todo ID:", req.params.id);
+    console.log("User ID:", req.user);
     const deleted = await Todo.deleteOne({
       _id: req.params.id,
       user: req.user.id,
