@@ -15,17 +15,20 @@ app.use("/api/auth", authRoutes);
 
 const PORT = process.env.PORT || 8080;
 
-
 // 🟢 ربط MongoDB
-mongoose.connect(process.env.MONGO_URI||"mongodb+srv://bassem:4123@bassemgamal.b8rap.mongodb.net/")
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+mongoose
+  .connect(
+    process.env.MONGO_URI ||
+      "mongodb+srv://bassem:4123@bassemgamal.b8rap.mongodb.net/",
+  )
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
 
 // 🧩 إنشاء Schema و Model
 const todoSchema = new mongoose.Schema({
   text: String,
   completed: Boolean,
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 const Todo = mongoose.model("Todo", todoSchema);
@@ -36,82 +39,87 @@ app.get("/", (req, res) => {
   res.send("API is running 🚀");
 });
 
-
 // GET جميع المهام
-app.get("/api/todos",auth, async (req, res) => {
-  const todos = await Todo.find({user: req.user.id});
+app.get("/api/todos", auth, async (req, res) => {
+  const todos = await Todo.find({ user: req.user.id });
   res.json(todos);
 });
 
 // POST إضافة مهمة جديدة
 app.post("/api/todos", auth, async (req, res) => {
-  const {text} = req.body;
-  if (!text || text.trim() === ""){
+  const { text } = req.body;
+  if (!text || text.trim() === "") {
     return res.status(400).json({
-      message: "Todo text is required."
+      message: "Todo text is required.",
     });
-  };
-  try{
-    const newTodo = new Todo({ text: text.trim(), completed: false, user: req.user.id });
-  await newTodo.save();
-  res.status(201).json(newTodo);
-  }catch(err){
-    res.status(500).json({message: "Server error."});
-  };
-  
+  }
+  try {
+    const newTodo = new Todo({
+      text: text.trim(),
+      completed: false,
+      user: req.user.id,
+    });
+    await newTodo.save();
+    res.status(201).json(newTodo);
+  } catch (err) {
+    res.status(500).json({ message: "Server error." });
+  }
 });
 
 // PUT تعديل مهمة
 app.put("/api/todos/:id", async (req, res) => {
-  const {text, completed} = req.body;
-if (!text || typeof completed !== "boolean"){
-  return res.status(400).json({
-    message: "Invalid data."
-  });
-};
-
-try{
-const updatedTodo = await Todo.findByIdAndUpdate(
-    req.params.id,
-    { text: text.trim(), completed },
-    { new: true }
-  );
-
-  if(!updatedTodo){
-    return res.status(404).json({
-      message: "Todo not found."
+  const { text, completed } = req.body;
+  if (!text || typeof completed !== "boolean") {
+    return res.status(400).json({
+      message: "Invalid data.",
     });
-  };
-  res.json(updatedTodo);
-}catch(err){
-  res.status(500).json({
-    message: "Server error."
-  });
-};
+  }
 
-  
+  try {
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      { text: text.trim(), completed },
+      { new: true },
+    );
+
+    if (!updatedTodo) {
+      return res.status(404).json({
+        message: "Todo not found.",
+      });
+    }
+    res.json(updatedTodo);
+  } catch (err) {
+    res.status(500).json({
+      message: "Server error.",
+    });
+  }
 });
 
 // DELETE حذف مهمة
 app.delete("/api/todos/:id", async (req, res) => {
-  try{
-    const deleted =   await Todo.deleteOne({_id: req.params.id, user: req.user.id});
-    if (!deleted){
-      return res.status(404).json({
-        message: "Todo not found."
-      });
-    };
-    res.json({ message: "Deleted" });
-  }catch(err){
-    res.status(500).json({
-      message: "Server error."
+  try {
+    const deleted = await Todo.deleteOne({
+      _id: req.params.id,
+      user: req.user.id,
     });
-  };
+    if (!deleted) {
+      return res.status(404).json({
+        message: "Todo not found.",
+      });
+    }
+    res.json({ message: "Deleted" });
+  } catch (err) {
+    res.status(500).json({
+      message: "Server error.",
+    });
+  }
 });
 
 app.get("/api/auth/me", auth, (req, res) => {
-  res.json({ok:true});
+  res.json({ ok: true });
 });
 
-
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`),
+);
+app.use("./middleware/errorHandler");

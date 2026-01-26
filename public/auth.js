@@ -24,11 +24,10 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     const name = regName.value.trim();
     const email = regEmail.value.trim();
     const password = regPassword.value.trim();
-
     if(!name || !email || !password){
         return showMessage("All fields required. ❌");
-    }
-
+    };
+    
     try{
         const res = await fetch(`${API}/register`, {
             method: "POST",

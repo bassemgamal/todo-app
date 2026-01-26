@@ -2,7 +2,6 @@ body{
     font-family: Arial;
     background: #111;
     color: #fff;
-    display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -17,6 +16,10 @@ input, button{
     width: 100%;
     margin: 8px 0;
     padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    min-width: 100px;
+    max-width: 100%;
 }
 button{
     background: #4caf50;
@@ -27,7 +30,34 @@ button{
 #message{
     color: red;
     margin-top: 10px;
+    text-align: center;
+    align-items: center;
 }
 #loginForm{
     display: none;
+    flex-direction: column;
+    align-items: center;
+}
+#registerForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#forms{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+h1{
+    text-align: center;
+    margin-bottom: 20px;
+}
+#auther{
+    margin-top: 20px;
+    font-size: 12px;
+    color: #888;
+    text-align: center;
 }

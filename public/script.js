@@ -84,6 +84,7 @@ addBtn.addEventListener("click", async () => {
       return;
     }
     tasks.push(newTask);
+    showMessage("Task added successfully! ✅", true);
     taskInput.value = "";
     renderTasks();
   } catch (err) {
@@ -146,6 +147,7 @@ function renderTasks() {
           return;
         }
         tasks = tasks.map((t) => (t._id === updatedTask._id ? updatedTask : t));
+        showMessage("Task updated successfully! ✅", true);
         renderTasks();
       } catch (err) {
         console.error(err);
@@ -172,6 +174,7 @@ function renderTasks() {
           );
 
           tasks = tasks.filter((t) => t._id !== task._id);
+          showMessage("Task deleted successfully! ✅", true);
           renderTasks();
         }, 300);
       } catch (err) {
@@ -180,15 +183,16 @@ function renderTasks() {
     };
 
     li.appendChild(deleteBtn);
-    taskList.appendChild(li);
+    taskList.appendChild(li); 
   });
 }
 
-function showMessage(msg) {
-  const message = document.getElementById("message");
-  message.textContent = msg;
+function showMessage(msg, success = false) {
+  const el = document.getElementById("message");
+  el.textContent = msg;
+  el.style.color = success ? "green" : "red";
   setTimeout(() => {
-    message.textContent = "";
+    el.textContent = "";
   }, 3000);
 }
 

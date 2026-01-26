@@ -8,8 +8,10 @@
 </head>
 <body>
     <div class="container">
+        <div id="controlesBtns">
         <button id="themeToggle">🌙 Dark</button>
-        <button onclick="logout()">Logout</button>
+        <button id="logoutBtn" onclick="logout()">⬅️ Logout</button>
+        </div>
         <h1>📝 ToDo List</h1>
         <input type="text" id="taskInput" placeholder="Write a task">
         <button id="addBtn">Add</button>
@@ -21,7 +23,9 @@
         </div>
         <ul id="taskList">
         </ul>
+        <p id="auther">Created by Bassem Gamal</p>
     </div>
+    
     <script>
         let token = localStorage.getItem("token");
 
