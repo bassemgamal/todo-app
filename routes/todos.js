@@ -24,11 +24,9 @@ router.post("/", auth, async (req, res) => {
 router.delete("/:id", auth, async (req, res) => {
   try {
     const todoId = mongoose.Types.ObjectId(req.params.id);
-    const userId = mongoose.Types.ObjectId(req.user.id);
 
     const deleted = await Todo.deleteOne({
       _id: todoId,
-      user: userId,
     });
 
     if (deleted.deletedCount === 0) {
