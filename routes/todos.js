@@ -22,22 +22,22 @@ router.post("/", auth, async (req, res) => {
 // DELETE
 router.delete("/:id", auth, async (req, res) => {
   try {
+    const todoId = req.params.id;
+    const userId = req.user.id;
+
     const deleted = await Todo.deleteOne({
-      _id: req.params.id,
-      userId: req.user.id,
+      _id: todoId,
+      userId: userId,
     });
 
     if (deleted.deletedCount === 0) {
       return res.status(404).json({ message: "Todo not found or not allowed" });
     }
 
-    if (!deleted.deletedCount) {
-      return res.status(403).json({ message: "Not allowed" });
-    }
-
-    res.json({ message: "Todo deleted successfully>" });
+    res.json({ message: "Todo deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server error While deleting todo" });
+    console.error("DELETE TODO ERROR:", err);
+    res.status(500).json({ message: "Server error while deleting todo" });
   }
 });
 
