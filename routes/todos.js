@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const auth = require("../middleware/authMiddleware");
 const Todo = require("../models/Todo");
+const mongoose = require("mongoose");
 
 router.get("/", auth, async (req, res) => {
   const todos = await Todo.find({ userId: req.user.id });
@@ -22,8 +23,8 @@ router.post("/", auth, async (req, res) => {
 // DELETE
 router.delete("/:id", auth, async (req, res) => {
   try {
-    const todoId = req.params.id;
-    const userId = req.user.id;
+    const todoId = mongoose.Types.ObjectId(req.params.id);
+    const userId = mongoose.Types.ObjectId(req.user.id);
 
     const deleted = await Todo.deleteOne({
       _id: todoId,
