@@ -72,7 +72,7 @@ addBtn.addEventListener("click", async () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({ text }),
       },
@@ -126,14 +126,13 @@ function renderTasks() {
     // ✅ تعليم كمكتمل
     li.onclick = async () => {
       try {
-        
         const res = await fetch(
           `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
           {
             method: "PUT",
             headers: {
-              "Authorization": `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json"
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
               text: task.text,
@@ -168,14 +167,23 @@ function renderTasks() {
               method: "DELETE",
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
             },
-          );
-
-          tasks = tasks.filter((t) => t._id !== task._id);
-          showMessage("Task deleted successfully! ✅", true);
-          renderTasks();
+          )
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error("Deleted failed.");
+              }
+            })
+            .then(() => {
+              tasks = tasks.filter((t) => t._id !== task._id);
+              showMessage("Task deleted successfully! ✅", true);
+              renderTasks();
+            })
+            .catch((err) => {
+              showMessage(err.message || "Failed to delete todo. ❌");
+            });
         }, 300);
       } catch (err) {
         console.error(err);
@@ -183,7 +191,7 @@ function renderTasks() {
     };
 
     li.appendChild(deleteBtn);
-    taskList.appendChild(li); 
+    taskList.appendChild(li);
   });
 }
 
@@ -207,12 +215,15 @@ async function checkAuth() {
     return (window.location.href = "auth.html");
   }
 
-  const res = await fetch("https://todo-app-production-6cf0.up.railway.app/api/auth/me", {
-    headers: {
-      "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json"
+  const res = await fetch(
+    "https://todo-app-production-6cf0.up.railway.app/api/auth/me",
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
     },
-  });
+  );
 
   if (!res.ok) {
     localStorage.removeItem("token");
