@@ -23,16 +23,15 @@ router.post("/", auth, async (req, res) => {
 // DELETE
 router.delete("/:id", auth, async (req, res) => {
   try {
-    const todoId = req.params.id;
-    const userId = req.user.id;
+    // تأكد من تحويل الـ IDs
+    const todoId = mongoose.Types.ObjectId(req.params.id);
+    const userId = mongoose.Types.ObjectId(req.user.id);
 
+    console.log(req.params.id, req.user.id);
     const deleted = await Todo.deleteOne({
       _id: todoId,
-      userId,
+      userId: userId,
     });
-    console.log(_id);
-    console.log(userId);
-    console.log(deleted);
 
     if (deleted.deletedCount === 0) {
       return res.status(404).json({ message: "Todo not found or not allowed" });
@@ -40,7 +39,7 @@ router.delete("/:id", auth, async (req, res) => {
 
     res.json({ message: "Todo deleted successfully" });
   } catch (err) {
-    console.error("DELETE TODO ERROR:", err);
+    console.error("DELETE TODO ERROR:", err); // 🔍 هنا هتعرف السبب
     res.status(500).json({ message: "Server error while deleting todo" });
   }
 });
