@@ -5,42 +5,61 @@ _______________________________________________________________
 
 🚀 Live Demo
 
-👉 Live App: https://bassemgamal.github.io/todo-app/
+👉 Live Demo App: https://bassemgamal.github.io/todo-app/
+👉 Live Full App: https://todo-app-frontend-bassem-gamals-projects.vercel.app/
 
  ____________________________________________________________
 ✨ Features
 
 ➕ Add new tasks
-
 ❌ Delete tasks
-
 ✅ Mark tasks as completed
-
 🔍 Filter tasks (All / Active / Completed)
-
 💾 Persistent data using LocalStorage
-
 🎨 Clean and responsive UI
+- Authentication (JWT)
+- User-specific Todos
+- Dark Mode 🌙
+- Responsive UI
+- MongoDB + Express + Node.js
 
  ____________________________________________________________
 
 🛠 Technologies Used
 
 HTML5
-
 CSS3
-
 JavaScript (ES6)
-
 LocalStorage
-
+Node.js
+Express
+MongoDB
+Vanilla JS
+Railway + Vercel
 _____________________________________________________________
 📂 Project Structure
 
 todo-app/
-│── index.html
-│── style.css
-│── script.js
+│── .vscode
+│── node_modules
+│── middleware
+    │── auth.js
+    │── authMiddleware.js
+    │── errorHandler.js
+│── models
+    │── USer.js
+│── routes
+    │── auth.js
+    │── todos.js
+│── public
+    │── index.html
+    │── style.css
+    │── auth.html
+    │── script.js
+    │── styleAuth.css
+    │── auth.js
+│── .env
+│── index.js
 │── README.md
 ___________________________________________________________________
 
@@ -67,17 +86,7 @@ git clone [https://github.com/basemgamal/todo-app.git](https://github.com/bassem
 
 Open index.html in your browser.
 
-_____________________________________________________________
 
-📌 Future Improvements
-
-Dark mode 🌙
-
-Edit tasks ✏️
-
-Animations
-
-Backend integration
 ____________________________________________
 👨‍💻 Author
 
