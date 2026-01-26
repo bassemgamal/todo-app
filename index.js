@@ -48,7 +48,7 @@ app.post("/api/todos", auth, async (req, res) => {
   const {text} = req.body;
   if (!text || text.trim() === ""){
     return res.status(400).json({
-      message: "Task text is required."
+      message: "Todo text is required."
     });
   };
   try{
@@ -95,7 +95,7 @@ const updatedTodo = await Todo.findByIdAndUpdate(
 // DELETE حذف مهمة
 app.delete("/api/todos/:id", async (req, res) => {
   try{
-    const deleted =   await Todo.findByIdAndDelete(req.params.id);
+    const deleted =   await Todo.deleteOne({_id: req.params.id, user: req.user.id});
     if (!deleted){
       return res.status(404).json({
         message: "Todo not found."
