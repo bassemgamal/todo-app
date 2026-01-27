@@ -8,11 +8,22 @@ require("dotenv").config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://vercel.com/bassem-gamals-projects/todo-app-frontend/DrSWBpKPFETSMP6QMsigqLKWkmRR",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
+
+app.use("/api/todos", require("./routes/todos"));
 
 const PORT = process.env.PORT || 8080;
 
@@ -35,7 +46,6 @@ const todoSchema = new mongoose.Schema({
 const Todo = mongoose.model("Todo", todoSchema);
 
 // Routes
-app.use("/api/todos", require("./routes/todos"));
 
 app.get("/", (req, res) => {
   res.send("API is running 🚀");
