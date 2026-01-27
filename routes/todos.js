@@ -23,14 +23,9 @@ router.post("/", auth, async (req, res) => {
 // DELETE
 router.delete("/:id", auth, async (req, res) => {
   try {
-    // تأكد من تحويل الـ IDs
-    console.log("Todo ID:", req.params.id);
-    console.log("User ID:", req.user);
-
-    console.log(req.params.id, req.user.id);
     const deleted = await Todo.deleteOne({
-      _id: todoId,
-      userId: userId,
+      _id: req.params.id,
+      userId: req.user.id,
     });
 
     if (deleted.deletedCount === 0) {

@@ -98,24 +98,24 @@ app.put("/api/todos/:id", async (req, res) => {
 
 // DELETE حذف مهمة
 app.delete("/api/todos/:id", async (req, res) => {
+  console.log("🧨 DELETE ROUTE HIT");
+  console.log("Todo ID:", req.params.id);
+  console.log("User ID:", req.user);
+
   try {
-    console.log("🧨 DELETE ROUTE HIT");
-    console.log("Todo ID:", req.params.id);
-    console.log("User ID:", req.user);
     const deleted = await Todo.deleteOne({
       _id: req.params.id,
-      user: req.user.id,
+      userId: req.user.id,
     });
-    if (!deleted) {
-      return res.status(404).json({
-        message: "Todo not found.",
-      });
+
+    if (deleted.deletedCount === 0) {
+      return res.status(404).json({ message: "Todo not found or not allowed" });
     }
-    res.json({ message: "Deleted" });
+
+    res.json({ message: "Todo deleted successfully" });
   } catch (err) {
-    res.status(500).json({
-      message: "Server error.",
-    });
+    console.error("DELETE TODO ERROR:", err); // 🔍 هنا هتعرف السبب
+    res.status(500).json({ message: "Server error while deleting todo" });
   }
 });
 
