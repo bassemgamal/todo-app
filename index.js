@@ -12,6 +12,7 @@ app.use(
   cors({
     origin: [
       "https://vercel.com/bassem-gamals-projects/todo-app-frontend/DrSWBpKPFETSMP6QMsigqLKWkmRR",
+      "https://todo-app-production-6cf0.up.railway.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
