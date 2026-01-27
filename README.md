@@ -1,14 +1,16 @@
 📝 To-Do List App
 
 A simple and clean To-Do List application built with Vanilla JavaScript to practice core front-end concepts.
-_______________________________________________________________
+
+---
 
 🚀 Live Demo
 
 👉 Live Demo App: https://bassemgamal.github.io/todo-app/
 👉 Live Full App: https://todo-app-frontend-bassem-gamals-projects.vercel.app/
 
- ____________________________________________________________
+---
+
 ✨ Features
 
 ➕ Add new tasks
@@ -17,13 +19,14 @@ _______________________________________________________________
 🔍 Filter tasks (All / Active / Completed)
 💾 Persistent data using LocalStorage
 🎨 Clean and responsive UI
+
 - Authentication (JWT)
 - User-specific Todos
 - Dark Mode 🌙
 - Responsive UI
 - MongoDB + Express + Node.js
 
- ____________________________________________________________
+---
 
 🛠 Technologies Used
 
@@ -36,32 +39,35 @@ Express
 MongoDB
 Vanilla JS
 Railway + Vercel
-_____________________________________________________________
+
+---
+
 📂 Project Structure
 
 todo-app/
 │── .vscode
 │── node_modules
 │── middleware
-    │── auth.js
-    │── authMiddleware.js
-    │── errorHandler.js
+│── auth.js
+│── authMiddleware.js
+│── errorHandler.js
 │── models
-    │── USer.js
+│── User.js
 │── routes
-    │── auth.js
-    │── todos.js
+│── auth.js
+│── todos.js
 │── public
-    │── index.html
-    │── style.css
-    │── auth.html
-    │── script.js
-    │── styleAuth.css
-    │── auth.js
+│── index.html
+│── style.css
+│── auth.html
+│── script.js
+│── styleAuth.css
+│── auth.js
 │── .env
 │── index.js
 │── README.md
-___________________________________________________________________
+
+---
 
 🧠 What I Learned
 
@@ -76,7 +82,8 @@ JavaScript Array methods (filter, forEach)
 LocalStorage for data persistence
 
 Writing clean and reusable code
-__________________________________________________________________
+
+---
 
 How to Run Locally
 
@@ -86,13 +93,14 @@ git clone [https://github.com/basemgamal/todo-app.git](https://github.com/bassem
 
 Open index.html in your browser.
 
+---
 
-____________________________________________
 👨‍💻 Author
 
 Bassem Gamal
 Junior JavaScript Developer
-_____________________________________________
+
+---
 
 ⭐️ Show Your Support
 

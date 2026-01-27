@@ -1,8 +1,11 @@
+const API_BASE_URL = "https://todo-app-production-6cf0.up.railway.app";
+// const API_BASE_URL = "http://localhost:8080"; // For local development
+
 const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
 
-token = localStorage.getItem("token");
+let token = localStorage.getItem("token");
 
 const allBtn = document.getElementById("allBtn");
 const activeBtn = document.getElementById("activeBtn");
@@ -34,14 +37,11 @@ let filter = "all";
 // 🔹 جلب المهام من API
 async function fetchTasks() {
   try {
-    const res = await fetch(
-      "https://todo-app-production-6cf0.up.railway.app/api/todos",
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+    const res = await fetch(`${API_BASE_URL}/api/todos`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    );
+    });
     tasks = await res.json();
     if (!res.ok) {
       showMessage(tasks.message || "Something went wrong.");
@@ -66,17 +66,14 @@ addBtn.addEventListener("click", async () => {
   }
 
   try {
-    const res = await fetch(
-      "https://todo-app-production-6cf0.up.railway.app/api/todos",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ text }),
+    const res = await fetch(`${API_BASE_URL}/api/todos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-    );
+      body: JSON.stringify({ text }),
+    });
 
     const newTask = await res.json();
     if (!res.ok) {
@@ -126,20 +123,17 @@ function renderTasks() {
     // ✅ تعليم كمكتمل
     li.onclick = async () => {
       try {
-        const res = await fetch(
-          `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              text: task.text,
-              completed: !task.completed,
-            }),
+        const res = await fetch(`${API_BASE_URL}/api/todos/${task._id}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify({
+            text: task.text,
+            completed: !task.completed,
+          }),
+        });
         const updatedTask = await res.json();
         if (!res.ok) {
           showMessage(updatedTask.message || "Something went wrong.");
@@ -161,16 +155,13 @@ function renderTasks() {
       li.style.animation = "fadeOut 0.3s ease";
       try {
         setTimeout(async () => {
-          await fetch(
-            `https://todo-app-production-6cf0.up.railway.app/api/todos/${task._id}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
+          await fetch(`${API_BASE_URL}/api/todos/${task._id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
-          )
+          })
             .then((res) => {
               if (!res.ok) {
                 throw new Error("Deleted failed.");
@@ -215,15 +206,12 @@ async function checkAuth() {
     return (window.location.href = "auth.html");
   }
 
-  const res = await fetch(
-    "https://todo-app-production-6cf0.up.railway.app/api/auth/me",
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
+  const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
-  );
+  });
 
   if (!res.ok) {
     localStorage.removeItem("token");
