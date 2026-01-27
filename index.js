@@ -35,89 +35,19 @@ const todoSchema = new mongoose.Schema({
 const Todo = mongoose.model("Todo", todoSchema);
 
 // Routes
+app.use("/api/todos", require("./routes/todos"));
 
 app.get("/", (req, res) => {
   res.send("API is running 🚀");
 });
 
 // GET جميع المهام
-app.get("/api/todos", auth, async (req, res) => {
-  const todos = await Todo.find({ user: req.user.id });
-  res.json(todos);
-});
 
 // POST إضافة مهمة جديدة
-app.post("/api/todos", auth, async (req, res) => {
-  const { text } = req.body;
-  if (!text || text.trim() === "") {
-    return res.status(400).json({
-      message: "Todo text is required.",
-    });
-  }
-  try {
-    const newTodo = new Todo({
-      text: text.trim(),
-      completed: false,
-      user: req.user.id,
-    });
-    await newTodo.save();
-    res.status(201).json(newTodo);
-  } catch (err) {
-    res.status(500).json({ message: "Server error." });
-  }
-});
 
 // PUT تعديل مهمة
-app.put("/api/todos/:id", async (req, res) => {
-  const { text, completed } = req.body;
-  if (!text || typeof completed !== "boolean") {
-    return res.status(400).json({
-      message: "Invalid data.",
-    });
-  }
-
-  try {
-    const updatedTodo = await Todo.findByIdAndUpdate(
-      req.params.id,
-      { text: text.trim(), completed },
-      { new: true },
-    );
-
-    if (!updatedTodo) {
-      return res.status(404).json({
-        message: "Todo not found.",
-      });
-    }
-    res.json(updatedTodo);
-  } catch (err) {
-    res.status(500).json({
-      message: "Server error.",
-    });
-  }
-});
 
 // DELETE حذف مهمة
-app.delete("/api/todos/:id", async (req, res) => {
-  console.log("🧨 DELETE ROUTE HIT");
-  console.log("Todo ID:", req.params.id);
-  console.log("User ID:", req.user);
-
-  try {
-    const deleted = await Todo.deleteOne({
-      _id: req.params.id,
-      userId: req.user.id,
-    });
-
-    if (deleted.deletedCount === 0) {
-      return res.status(404).json({ message: "Todo not found or not allowed" });
-    }
-
-    res.json({ message: "Todo deleted successfully" });
-  } catch (err) {
-    console.error("DELETE TODO ERROR:", err); // 🔍 هنا هتعرف السبب
-    res.status(500).json({ message: "Server error while deleting todo" });
-  }
-});
 
 app.get("/api/auth/me", auth, (req, res) => {
   res.json({ ok: true });
