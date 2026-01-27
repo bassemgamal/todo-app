@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const auth = require("../middleware/authMiddleware");
+const auth = require("../middleware/auth");
 const Todo = require("../models/Todo");
 // GET
 

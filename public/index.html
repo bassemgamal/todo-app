@@ -1,43 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo App</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div class="container">
-        <div id="controlesBtns">
+      <div id="controlesBtns">
         <button id="themeToggle">🌙 Dark</button>
         <button id="logoutBtn" onclick="logout()">⬅️ Logout</button>
-        </div>
-        <h1>📝 ToDo List</h1>
-        <input type="text" id="taskInput" placeholder="Write a task">
-        <button id="addBtn">Add</button>
-        <p id="message"></p>
-        <div class="filters">
+      </div>
+      <h1>📝 ToDo List</h1>
+      <input type="text" id="taskInput" placeholder="Write a task" />
+      <button id="addBtn">Add</button>
+      <p id="message"></p>
+      <div class="filters">
         <button id="allBtn">All</button>
         <button id="completedBtn">Completed</button>
         <button id="activeBtn">Active</button>
-        </div>
-        <ul id="taskList">
-        </ul>
-        <p id="auther">Created by Bassem Gamal</p>
+      </div>
+      <ul id="taskList"></ul>
+      <p id="auther">Created by Bassem Gamal</p>
     </div>
-    
-    <script>
-        let token = localStorage.getItem("token");
 
-        if(!token){
-             window.location.href = "auth.html";
-        };
-
-        function logout(){
-            localStorage.removeItem("token");
-            window.location.href = "auth.html";
-        }
-    </script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

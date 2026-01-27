@@ -1,5 +1,5 @@
-const API_BASE_URL = "https://todo-app-production-6cf0.up.railway.app";
-// const API_BASE_URL = "http://localhost:8080"; // For local development
+// const API_BASE_URL = "https://todo-app-production-6cf0.up.railway.app";
+const API_BASE_URL = "http://localhost:8080"; // For local development
 
 const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
@@ -105,8 +105,6 @@ completedBtn.onclick = () => {
 
 // عرض المهام
 function renderTasks() {
-  console.log(localStorage.getItem("token"));
-
   taskList.innerHTML = "";
 
   let filteredTasks = tasks;
