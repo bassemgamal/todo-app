@@ -36,15 +36,6 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
-// 🧩 إنشاء Schema و Model
-const todoSchema = new mongoose.Schema({
-  text: String,
-  completed: Boolean,
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-});
-
-const Todo = mongoose.model("Todo", todoSchema);
-
 // Routes
 
 app.get("/", (req, res) => {

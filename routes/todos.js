@@ -1,11 +1,8 @@
 const router = require("express").Router();
 const auth = require("../middleware/authMiddleware");
 const Todo = require("../models/Todo");
-const mongoose = require("mongoose");
-const cors = require("cors");
 // GET
 
-router.use(cors());
 router.get("/", auth, async (req, res) => {
   const todos = await Todo.find({ userId: req.user.id });
   res.json(todos);
