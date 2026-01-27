@@ -11,7 +11,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://vercel.com/bassem-gamals-projects/todo-app-frontend/DrSWBpKPFETSMP6QMsigqLKWkmRR",
+      "https://todo-app-frontend-alpha.vercel.app",
       "https://todo-app-production-6cf0.up.railway.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -42,14 +42,6 @@ mongoose
 app.get("/", (req, res) => {
   res.send("API is running 🚀");
 });
-
-// GET جميع المهام
-
-// POST إضافة مهمة جديدة
-
-// PUT تعديل مهمة
-
-// DELETE حذف مهمة
 
 app.get("/api/auth/me", auth, (req, res) => {
   res.json({ ok: true });
