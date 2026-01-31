@@ -1,11 +1,13 @@
-// const API_BASE_URL = "https://todo-app-production-6cf0.up.railway.app";
-const API_BASE_URL = "http://localhost:8080"; // For local development
-
+const Public_URL = "https://todo-app-production-6cf0.up.railway.app";
 const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
+const userBtn = document.getElementById("userBtn");
+const changeLangBtn = document.getElementById("changeLangBtn");
 
-let token = localStorage.getItem("token");
+token = localStorage.getItem("token");
+// localStorage.getItem("lang");
+// checkLang();
 
 const allBtn = document.getElementById("allBtn");
 const activeBtn = document.getElementById("activeBtn");
@@ -37,11 +39,7 @@ let filter = "all";
 // 🔹 جلب المهام من API
 async function fetchTasks() {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/todos`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await authFetch(`${Public_URL}/api/todos`);
     tasks = await res.json();
     if (!res.ok) {
       showMessage(tasks.message || "Something went wrong.");
@@ -54,6 +52,9 @@ async function fetchTasks() {
   }
 }
 
+function showLoader(show) {
+  document.getElementById("loader").style.display = show ? "block" : "none";
+};
 // استدعاء عند تحميل الصفحة
 fetchTasks();
 
@@ -66,11 +67,12 @@ addBtn.addEventListener("click", async () => {
   }
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/todos`, {
+    showLoader(true);
+    const res = await authFetch(`${Public_URL}/api/todos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({ text }),
     });
@@ -106,7 +108,6 @@ completedBtn.onclick = () => {
 // عرض المهام
 function renderTasks() {
   taskList.innerHTML = "";
-
   let filteredTasks = tasks;
   if (filter === "active") filteredTasks = tasks.filter((t) => !t.completed);
   if (filter === "completed") filteredTasks = tasks.filter((t) => t.completed);
@@ -121,10 +122,10 @@ function renderTasks() {
     // ✅ تعليم كمكتمل
     li.onclick = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/todos/${task._id}`, {
+        showLoader(true);
+        const res = await authFetch(`${Public_URL}/api/todos/${task._id}`, {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -152,12 +153,12 @@ function renderTasks() {
       e.stopPropagation();
       li.style.animation = "fadeOut 0.3s ease";
       try {
+        showLoader(true);
         setTimeout(async () => {
-          await fetch(`${API_BASE_URL}/api/todos/${task._id}`, {
+          await authFetch(`${Public_URL}/api/todos/${task._id}`, {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
             },
           })
             .then((res) => {
@@ -195,7 +196,9 @@ function showMessage(msg, success = false) {
 
 function logout() {
   localStorage.removeItem("token");
+  localStorage.removeItem("username");
   window.location.href = "auth.html";
+  userBtn.textContent = "Guest";
 }
 
 async function checkAuth() {
@@ -204,9 +207,14 @@ async function checkAuth() {
     return (window.location.href = "auth.html");
   }
 
-  const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
+  if(res.status === 401){
+    localStorage.removeItem("token");
+    alert("Session expired. Please log in again.");
+    return (window.location.href = "auth.html");
+  }
+  
+  const res = await authFetch(`${Public_URL}/api/auth/me`, {
     headers: {
-      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   });
@@ -214,7 +222,74 @@ async function checkAuth() {
   if (!res.ok) {
     localStorage.removeItem("token");
     window.location.href = "auth.html";
+  } else {
+    const storedName = localStorage.getItem("username");
+    userBtn.textContent = `Hi ${storedName.toUpperCase()}, Welcome Back!` || "Guest";
   }
 }
 
+// function checkLang() {
+//   if (localStorage.getItem("lang") === "ar") {
+//     changeLangBtn.textContent = "English";
+//     document.body.style.direction = "rtl";
+//     themeToggle.textContent = "لايت ☀️";
+//     logoutBtn.textContent = "تسجيل الخروج ⬅️";
+//     userBtn.textContent = "مرحبا " + localStorage.getItem("username") + " نورت";
+//     addBtn.textContent = "أضافة";
+//     taskInput.placeholder = "اكتب مهمة...";
+//     allBtn.textContent = "الكل";
+//     activeBtn.textContent = "النشطة";
+//     completedBtn.textContent = "المكتملة";
+//     message.textContent = "";
+//     auther.textContent = "أنشئ بواسطة باسم جمال";
+//   } else {
+//     changeLangBtn.textContent = "العربية";
+//     document.body.style.direction = "ltr";
+//     themeToggle.textContent = "Light 🌙";
+//     logoutBtn.textContent = "Logout ⬅️";
+//     userBtn.textContent =
+//       "Hi " + localStorage.getItem("username") + " Welcome Back!";
+//     addBtn.textContent = "Add";
+//     taskInput.placeholder = "Write a task...";
+//     allBtn.textContent = "All";
+//     activeBtn.textContent = "Active";
+//     completedBtn.textContent = "Completed";
+//     message.textContent = "";
+//     auther.textContent = "Created by Bassem Gamal";
+//   }
+// }
+
+// function changeLang() {
+//   if (localStorage.getItem("lang") === "en") {
+//     localStorage.setItem("lang", "ar");
+//     checkLang();
+//     window.location.reload();
+//   } else {
+//     localStorage.setItem("lang", "en");
+//     checkLang();
+//     window.location.reload();
+//   }
+// }
+
 checkAuth();
+
+async function authFetch(url, options = {}) {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...(options.headers || {})
+    }
+  });
+
+  if (res.status === 401) {
+    localStorage.removeItem("token");
+    alert("Session expired. Please log in again.");
+    window.location.href = "auth.html";
+    throw new Error("Unauthorized");
+  }
+  return res;
+}

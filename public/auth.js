@@ -1,7 +1,4 @@
-// const API_BASE_URL = "https://todo-app-production-6cf0.up.railway.app";
-const API_BASE_URL = "http://localhost:8080"; // For local development
-
-const API = `${API_BASE_URL}/api/auth`;
+const API = "https://todo-app-production-6cf0.up.railway.app/api/auth";
 const message = document.getElementById("message");
 
 const registerForm = document.getElementById("registerForm");
@@ -46,6 +43,11 @@ document
       }
 
       localStorage.setItem("token", data.token);
+
+      // Save username if available
+      const name = data.name || (data.user && data.user.name);
+      if (name) localStorage.setItem("username", name);
+
       window.location.href = "index.html";
     } catch {
       showMessage("Server error. ❌");
@@ -79,6 +81,10 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     }
 
     localStorage.setItem("token", data.token);
+
+    // Save username if available
+    const name = data.name || (data.user && data.user.name);
+    if (name) localStorage.setItem("username", name);
     window.location.href = "index.html";
   } catch {
     showMessage("Server error. ❌");

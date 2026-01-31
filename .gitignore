@@ -1,0 +1,11 @@
+.env
+node_modules
+.env.local
+.env.example
+.env.production
+.env.development
+.env.test
+.env.test.local
+.env.test.example
+.env.test.production
+.env.test.development
