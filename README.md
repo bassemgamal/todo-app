@@ -3,7 +3,14 @@
 A simple and clean To-Do List application built with Vanilla JavaScript to practice core front-end concepts.
 
 ---
-
+__________________________________
+Project: Full Stack Todo App
+________________________________
+Built REST API with Node.js & Express
+Implemented JWT authentication
+Connected MongoDB Atlas
+Deployed on Railway & Vercel
+__________________________________
 🚀 Live Demo
 
 👉 Live Demo App: https://bassemgamal.github.io/todo-app/
@@ -90,6 +97,7 @@ How to Run Locally
 Clone the repository:
 
 git clone [https://github.com/basemgamal/todo-app.git](https://github.com/bassemgamal/todo-app.git)
+https://github.com/bassemgamal/Todo-App-Frontend.git
 
 Open index.html in your browser.
 
