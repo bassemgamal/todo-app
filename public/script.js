@@ -56,7 +56,7 @@ async function fetchTasks() {
 
 function showLoader(show) {
   document.getElementById("loader").style.display = show ? "block" : "none";
-};
+}
 // استدعاء عند تحميل الصفحة
 fetchTasks();
 
@@ -72,10 +72,6 @@ addBtn.addEventListener("click", async () => {
     showLoader(true);
     const res = await authFetch(`${Public_URL}/api/todos`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
       body: JSON.stringify({ text }),
     });
     showLoader(false);
@@ -127,9 +123,6 @@ function renderTasks() {
         showLoader(true);
         const res = await authFetch(`${Public_URL}/api/todos/${task._id}`, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({
             text: task.text,
             completed: !task.completed,
@@ -160,9 +153,6 @@ function renderTasks() {
         setTimeout(async () => {
           await authFetch(`${Public_URL}/api/todos/${task._id}`, {
             method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
           })
             .finally(() => showLoader(false))
             .then((res) => {
@@ -211,17 +201,7 @@ async function checkAuth() {
     return (window.location.href = "auth.html");
   }
 
-  if(res.status === 401){
-    localStorage.removeItem("token");
-    alert("Session expired. Please log in again.");
-    return (window.location.href = "auth.html");
-  }
-
-  const res = await authFetch(`${Public_URL}/api/auth/me`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const res = await authFetch(`${Public_URL}/api/auth/me`);
 
   if (!res.ok) {
     localStorage.removeItem("token");
@@ -275,8 +255,6 @@ async function checkAuth() {
 //   }
 // }
 
-checkAuth();
-
 async function authFetch(url, options = {}) {
   const token = localStorage.getItem("token");
 
@@ -285,8 +263,8 @@ async function authFetch(url, options = {}) {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
-      ...(options.headers || {})
-    }
+      ...(options.headers || {}),
+    },
   });
 
   if (res.status === 401) {
@@ -297,3 +275,5 @@ async function authFetch(url, options = {}) {
   }
   return res;
 }
+
+checkAuth();
