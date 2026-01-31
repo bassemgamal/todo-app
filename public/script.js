@@ -56,7 +56,7 @@ async function fetchTasks() {
 
 function showLoader(show) {
   document.getElementById("loader").style.display = show ? "block" : "none";
-}
+};
 // استدعاء عند تحميل الصفحة
 fetchTasks();
 
@@ -211,7 +211,7 @@ async function checkAuth() {
     return (window.location.href = "auth.html");
   }
 
-  if (res.status === 401) {
+  if(res.status === 401){
     localStorage.removeItem("token");
     alert("Session expired. Please log in again.");
     return (window.location.href = "auth.html");
@@ -285,8 +285,8 @@ async function authFetch(url, options = {}) {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
-      ...(options.headers || {}),
-    },
+      ...(options.headers || {})
+    }
   });
 
   if (res.status === 401) {
