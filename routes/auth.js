@@ -38,9 +38,13 @@ router.post("/register", async (req, res) => {
       email: user.email,
     };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      payload,
+      process.env.JWT_SECRET || "supersecretkey",
+      {
+        expiresIn: "1d",
+      },
+    );
 
     res.status(201).json({
       token,
@@ -78,9 +82,13 @@ router.post("/login", async (req, res) => {
       email: user.email,
     };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      payload,
+      process.env.JWT_SECRET || "supersecretkey",
+      {
+        expiresIn: "1d",
+      },
+    );
 
     res.json({
       token,
