@@ -1,3 +1,13 @@
+![Status](https://img.shields.io/badge/Status-Completed-success)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
+![Node.js](https://img.shields.io/badge/Node.js-Express-green)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen)
+![JWT](https://img.shields.io/badge/Auth-JWT-orange)
+![Frontend](https://img.shields.io/badge/Frontend-Vanilla_JS-blue)
+![Backend](https://img.shields.io/badge/Backend-Railway-purple)
+
+# Todo App (Full Stack)
+
 📝 To-Do List App
 
 A simple and clean To-Do List application built with Vanilla JavaScript to practice core front-end concepts.
