@@ -95,6 +95,24 @@ Open index.html in your browser.
 
 ---
 
+## Screenshots
+
+### Login
+
+![Login](screenshots/loginForm.png)
+
+### Register
+
+![Register](screenshots/registerForm.png)
+
+### Darkmode
+
+![Darkmode](screenshots/darkmode.png)
+
+### Lightmode
+
+![Lightmode](screenshots/lightmode.png)
+
 👨‍💻 Author
 
 Bassem Gamal
